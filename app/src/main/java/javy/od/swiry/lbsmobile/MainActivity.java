@@ -24,6 +24,15 @@ public class MainActivity extends AppCompatActivity {
     private LoginButton loginButton;
     private TextView isLogin;
 
+    public void click(View view) {
+        switch (view.getId()) {
+            case R.id.bRegister:
+                Intent Register = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(Register);
+                break;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,5 +74,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this,"Login failed",Toast.LENGTH_LONG).show();
                     }
                 });
+
     }
 }

@@ -80,7 +80,7 @@
             android:layout_alignStart="@+id/bLogin"
             android:layout_below="@+id/bLogin"
             android:layout_marginTop="12dp"
-            android:onClick="nacisnij"
+            android:onClick="click"
             android:text="Register"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
