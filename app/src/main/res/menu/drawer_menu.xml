@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_advert"
+            android:icon="@drawable/ic_menu"
+            android:title="@string/advertisements" />
+        <item
+            android:id="@+id/nav_my_advert"
+            android:title="@string/my_advertisements" />
+        <item
+            android:id="@+id/nav_messages"
+            android:title="@string/messages" />
+    </group>
+</menu>

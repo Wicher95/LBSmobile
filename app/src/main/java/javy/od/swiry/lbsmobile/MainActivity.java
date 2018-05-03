@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -40,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         callbackManager = CallbackManager.Factory.create();
         isLogin = findViewById(R.id.isLogin);
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if(!accessToken.isExpired())
+        {
+            Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
+            startActivity(intent);
+        }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -59,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                     {
                         isLogin.setText("Zalogowano");
                         Toast.makeText(MainActivity.this,"Login sucess",Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -75,6 +85,5 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this,"Login failed",Toast.LENGTH_LONG).show();
                     }
                 });
-
     }
 }
