@@ -43,12 +43,14 @@ public class MainActivity extends AppCompatActivity {
         isLogin = findViewById(R.id.isLogin);
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if(!accessToken.isExpired())
-        {
-            Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
-            startActivity(intent);
+        if(accessToken != null) {
+            if (!accessToken.isExpired()) {
+                Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
+                startActivity(intent);
+            }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);

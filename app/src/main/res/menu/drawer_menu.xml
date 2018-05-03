@@ -5,7 +5,6 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_advert"
-            android:icon="@drawable/ic_menu"
             android:title="@string/advertisements" />
         <item
             android:id="@+id/nav_my_advert"
