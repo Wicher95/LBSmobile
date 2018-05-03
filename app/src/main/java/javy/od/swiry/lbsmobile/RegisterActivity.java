@@ -29,7 +29,7 @@ private FirebaseAuthException firebaseAuthException;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-       firebaseAuthException= FirebaseAuthException.getInstance();
+        //firebaseAuthException= FirebaseAuthException.getInstance();
 
         progressDialog = new ProgressDialog(this);
 
@@ -37,7 +37,7 @@ private FirebaseAuthException firebaseAuthException;
         etPassword = findViewById(R.id.etPassword);
         etUsername = findViewById(R.id.etUsername);
 
-
+    }
         private void registerUser(){
         String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
@@ -56,11 +56,11 @@ private FirebaseAuthException firebaseAuthException;
 
     }
 
-        @Override
+    /*    @Override
         public void onClick(View view) {
             if (view == bRegister) {
                 registerUser();
             }
 
-    }
+    }*/
 }
