@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void click(View view) {
         switch (view.getId()) {
-            case R.id.bRegister:
+            case R.id.Register:
                 Intent Register = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(Register);
                 break;
