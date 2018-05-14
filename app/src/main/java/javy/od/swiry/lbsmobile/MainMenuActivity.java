@@ -1,5 +1,7 @@
 package javy.od.swiry.lbsmobile;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.*;
 import android.support.v4.view.GravityCompat;
@@ -8,10 +10,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
+    private ListView mAdvertList;
+    ArrayList<String> listAdverts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,5 +70,36 @@ public class MainMenuActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public class CustomAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return listAdverts.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @SuppressLint("ViewHolder")
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = getLayoutInflater().inflate(R.layout.adv_adapter, null);
+            TextView advID = convertView.findViewById(R.id.advID);
+            ImageView mainImage = convertView.findViewById(R.id.image);
+            TextView mainText = convertView.findViewById(R.id.name);
+            TextView city = convertView.findViewById(R.id.city);
+            TextView date = convertView.findViewById(R.id.date);
+            TextView price = convertView.findViewById(R.id.price);
+            return convertView;
+        }
     }
 }

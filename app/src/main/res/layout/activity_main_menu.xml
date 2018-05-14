@@ -17,6 +17,14 @@
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
     </RelativeLayout>
 
+    <ListView
+        android:id="@+id/adverts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="54dp"/>
+
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
