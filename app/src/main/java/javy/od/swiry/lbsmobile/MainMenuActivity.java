@@ -1,6 +1,7 @@
 package javy.od.swiry.lbsmobile;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -46,7 +47,11 @@ public class MainMenuActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
 
                         String itemTitle = String.valueOf(menuItem.getTitle());
-                        if(itemTitle.equals("Ogłoszenia"))
+                        if(itemTitle.equals("Dodaj ogłoszenie"))
+                        {
+                            startActivity(new Intent(MainMenuActivity.this,NewAdvActivity.class));
+                        }
+                        else if(itemTitle.equals("Ogłoszenia"))
                         {
                             //startActivity(new Intent(MainActivity.this,MapsActivity.class));
                         }
