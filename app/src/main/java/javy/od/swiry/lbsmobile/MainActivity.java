@@ -1,8 +1,11 @@
 package javy.od.swiry.lbsmobile;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +19,23 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.android.gms.tasks.Task;
 
 import java.util.Arrays;
 
+import static android.content.ContentValues.TAG;
+
 public class MainActivity extends AppCompatActivity {
 
+    private Button bLogin;
+    private EditText etPassword;
+    private EditText etUsername;
+    private ProgressDialog progressDialog;
+
+    private FirebaseAuth firebaseAuth;
     private CallbackManager callbackManager;
     private static final String EMAIL = "email";
     private LoginButton loginButton;
@@ -35,12 +50,58 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void login(View view) {
+        switch (view.getId()) {
+            case R.id.bLogin:
+                loginUser();
+                break;
+        }
+    }
+
+    private void loginUser() {
+        String email = etUsername.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(MainActivity.this, "Podany email jest nieprawidłowy ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Podane hasło jest nieprawidłowe", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        progressDialog.setMessage("Logowanie użytkowanika ...");
+        progressDialog.show();
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, "Logowanie poprawne", Toast.LENGTH_SHORT).show();
+                            finish();
+                            Intent logo = new Intent(getApplicationContext(), ProgramActivity.class);
+                            startActivity(logo);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Podany login lub hasło są nieprawidłowe", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         callbackManager = CallbackManager.Factory.create();
         isLogin = findViewById(R.id.isLogin);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
+        bLogin = findViewById(R.id.bLogin);
+        etPassword = findViewById(R.id.etPassword);
+        etUsername = findViewById(R.id.etUsername);
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if(accessToken != null) {
@@ -87,5 +148,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this,"Login failed",Toast.LENGTH_LONG).show();
                     }
                 });
+
     }
 }

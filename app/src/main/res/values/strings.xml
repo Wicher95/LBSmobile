@@ -6,6 +6,13 @@
     <string name="advertisements">Ogłoszenia</string>
     <string name="my_advertisements">Moje ogłoszenia</string>
     <string name="messages">Wiadomości</string>
+    <string name="new_adv">Dodaj ogłoszenie</string>
+    <string name="adv_title">Tytuł</string>
+    <string name="adv_category">Kategoria</string>
+    <string name="adv_description">Opis</string>
+    <string name="adv_localization">Lokalizacja</string>
+    <string name="adv_phone">Numer telefonu</string>
+    <string name="adv_apply">Zatwierdź</string>
 
     <string name="facebook_app_id">1661107873985559</string>
     <string name="fb_login_protocol_scheme">fb1661107873985559</string>

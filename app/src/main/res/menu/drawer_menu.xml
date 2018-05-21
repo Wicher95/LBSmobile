@@ -4,6 +4,9 @@
     android:layout_height="match_parent">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_new_advert"
+            android:title="@string/new_adv" />
+        <item
             android:id="@+id/nav_advert"
             android:title="@string/advertisements" />
         <item

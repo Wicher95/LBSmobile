@@ -41,9 +41,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenuActivity">
-
-        </activity>
+        <activity android:name=".MainMenuActivity" />
+        <activity android:name=".ProgramActivity" />
+        <activity android:name=".NewAdvActivity"></activity>
     </application>
 
 </manifest>
