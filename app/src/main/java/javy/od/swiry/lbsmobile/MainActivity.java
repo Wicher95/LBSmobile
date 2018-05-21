@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(MainActivity.this, "Logowanie poprawne", Toast.LENGTH_SHORT).show();
                             finish();
-                            Intent logo = new Intent(getApplicationContext(), ProgramActivity.class);
+                            Intent logo = new Intent(getApplicationContext(), MainMenuActivity.class);
                             startActivity(logo);
                         } else {
                             Toast.makeText(MainActivity.this, "Podany login lub hasło są nieprawidłowe", Toast.LENGTH_SHORT).show();

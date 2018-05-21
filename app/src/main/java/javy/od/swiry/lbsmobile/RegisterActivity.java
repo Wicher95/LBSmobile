@@ -77,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             if (task.isSuccessful()) {
                                 Toast.makeText(RegisterActivity.this, "Rejestracja poprawna", Toast.LENGTH_SHORT).show();
                                 finish();
-                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
                                 startActivity(i);
                                 progressDialog.dismiss();
                             } else if(!task.isSuccessful())

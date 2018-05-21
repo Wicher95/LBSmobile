@@ -72,6 +72,7 @@
         android:layout_marginTop="10dp"
         android:id="@+id/apply"
         android:text="@string/adv_apply"
-        android:layout_below="@+id/phone"/>
+        android:layout_below="@+id/phone"
+        android:onClick="Apply"/>
 
 </RelativeLayout>
