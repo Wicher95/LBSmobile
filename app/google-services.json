@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "397591425361-j0q9bn4s925ls3b84huofvdml9884aph.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "javy.od.swiry.lbsmobile",
+            "certificate_hash": "34a45a1f070e4fdc0c22371ef334946cb78a64d7"
+          }
+        },
+        {
           "client_id": "397591425361-llpgrndo2nl5trj6lkdjm5dl7kormefh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

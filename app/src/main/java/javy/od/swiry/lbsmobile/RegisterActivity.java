@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,7 +71,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
             firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
@@ -78,8 +79,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 finish();
                                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                 startActivity(i);
-                            } else {
+                                progressDialog.dismiss();
+                            } else if(!task.isSuccessful())
+                            {
                                 Toast.makeText(RegisterActivity.this, "Niezajestrowany, spróbuj jeszcze raz", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }
+                            else {
+                               // Toast.makeText(RegisterActivity.this, "Niezajestrowany, spróbuj jeszcze raz", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                         }
                     });
