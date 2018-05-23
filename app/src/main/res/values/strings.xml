@@ -13,6 +13,7 @@
     <string name="adv_localization">Lokalizacja</string>
     <string name="adv_phone">Numer telefonu</string>
     <string name="adv_apply">Zatwierdź</string>
+    <string name="adv_price">Cena</string>
 
     <string name="facebook_app_id">1661107873985559</string>
     <string name="fb_login_protocol_scheme">fb1661107873985559</string>

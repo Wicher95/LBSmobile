@@ -29,7 +29,8 @@
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        app:srcCompat="@android:color/holo_purple" />
+        app:srcCompat="@android:color/holo_purple"
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/city"

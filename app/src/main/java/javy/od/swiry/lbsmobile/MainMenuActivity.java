@@ -1,9 +1,13 @@
 package javy.od.swiry.lbsmobile;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.*;
 import android.support.v4.view.GravityCompat;
@@ -19,14 +23,33 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import javy.od.swiry.lbsmobile.models.Advert;
 
 public class MainMenuActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mAdvertList;
-    ArrayList<String> listAdverts = new ArrayList<>();
+    private ArrayList<Uri> mImageList = new ArrayList<>();
+    private ArrayList<Advert> listAdverts = new ArrayList<>();
+    private File tmpFile;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +61,8 @@ public class MainMenuActivity extends AppCompatActivity {
         Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = findViewById(R.id.menu);
+        mAdvertList = findViewById(R.id.adverts);
+        progressDialog = new ProgressDialog(this);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -66,6 +91,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+        generateAdv();
     }
 
     //Otwieranie bocznego menu przyciskiem z toolbara
@@ -78,6 +104,45 @@ public class MainMenuActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        //generateAdv();
+    }
+
+
+    public void generateAdv() {
+        progressDialog.setMessage("Wczytywanie ogłoszeń");
+        progressDialog.show();
+        DatabaseReference adverts = FirebaseDatabase.getInstance().getReference("adverts");
+        adverts.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listAdverts.clear();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Advert advert = ds.getValue(Advert.class);
+                    if(advert != null) {
+                        listAdverts.add(advert);
+                    }
+                }
+                displayAdv();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void displayAdv(){
+        if(listAdverts.size() > 0) {
+            CustomAdapter customAdapter = new CustomAdapter();
+            mAdvertList.setAdapter(customAdapter);
+        }
+        progressDialog.dismiss();
+    }
+
 
     public class CustomAdapter extends BaseAdapter {
 
@@ -106,6 +171,12 @@ public class MainMenuActivity extends AppCompatActivity {
             TextView city = convertView.findViewById(R.id.city);
             TextView date = convertView.findViewById(R.id.date);
             TextView price = convertView.findViewById(R.id.price);
+
+            Glide.with(MainMenuActivity.this).load(listAdverts.get(position).getUrl()).into(mainImage);
+            mainText.setText(listAdverts.get(position).getTitle());
+            city.setText(listAdverts.get(position).getLocalization());
+            date.setText(listAdverts.get(position).getDate());
+            price.setText(listAdverts.get(position).getPrice());
             return convertView;
         }
     }
