@@ -8,9 +8,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Objects;
 
 import javy.od.swiry.lbsmobile.models.Advert;
 import javy.od.swiry.lbsmobile.models.AdvertCount;
@@ -56,11 +63,19 @@ public class NewAdvActivity extends AppCompatActivity {
     private static String count;
     private boolean imageAdded;
     private AdvertCount advertID;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_adv);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        mDrawerLayout = findViewById(R.id.menu);
+
         advertID = new AdvertCount();
         mContext = this;
         mGallery = findViewById(R.id.gallery);
@@ -73,6 +88,35 @@ public class NewAdvActivity extends AppCompatActivity {
         mPrice = findViewById(R.id.price);
         mStorageRef = FirebaseStorage.getInstance().getReference();
         progressDialog = new ProgressDialog(this);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        mDrawerLayout.closeDrawers();
+
+                        String itemTitle = String.valueOf(menuItem.getTitle());
+                        if(itemTitle.equals("Dodaj ogłoszenie"))
+                        {
+                            startActivity(new Intent(NewAdvActivity.this,NewAdvActivity.class));
+                        }
+                        else if(itemTitle.equals("Ogłoszenia"))
+                        {
+                            startActivity(new Intent(NewAdvActivity.this,MainMenuActivity.class));
+                        }
+                        else if(itemTitle.equals("Moje ogłoszenia"))
+                        {
+                            //startActivity(new Intent(MainActivity.this,AddShopActivity.class));
+                        }
+                        else if(itemTitle.equals("Wiadomości"))
+                        {
+                            //startActivity(new Intent(MainActivity.this,AddShopActivity.class));
+                        }
+                        return true;
+                    }
+                });
+
         firebase = FirebaseAuth.getInstance();
         FirebaseUser user = firebase.getCurrentUser();
         uid = user.getUid();
@@ -89,6 +133,17 @@ public class NewAdvActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    //Otwieranie bocznego menu przyciskiem z toolbara
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void Apply(View v)
