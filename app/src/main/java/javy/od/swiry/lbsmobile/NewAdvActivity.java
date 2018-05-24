@@ -102,7 +102,7 @@ public class NewAdvActivity extends AppCompatActivity {
                         String itemTitle = String.valueOf(menuItem.getTitle());
                         if(itemTitle.equals("Dodaj ogłoszenie"))
                         {
-                            startActivity(new Intent(NewAdvActivity.this,NewAdvActivity.class));
+                            //startActivity(new Intent(NewAdvActivity.this,NewAdvActivity.class));
                         }
                         else if(itemTitle.equals("Ogłoszenia"))
                         {
@@ -110,7 +110,7 @@ public class NewAdvActivity extends AppCompatActivity {
                         }
                         else if(itemTitle.equals("Moje ogłoszenia"))
                         {
-                            //startActivity(new Intent(MainActivity.this,AddShopActivity.class));
+                            startActivity(new Intent(NewAdvActivity.this,UserAdvActivity.class));
                         }
                         else if(itemTitle.equals("Wiadomości"))
                         {

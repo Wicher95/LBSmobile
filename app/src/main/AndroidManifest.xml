@@ -43,7 +43,8 @@
         </activity>
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".ProgramActivity" />
-        <activity android:name=".NewAdvActivity"></activity>
+        <activity android:name=".NewAdvActivity" />
+        <activity android:name=".UserAdvActivity"></activity>
     </application>
 
 </manifest>
