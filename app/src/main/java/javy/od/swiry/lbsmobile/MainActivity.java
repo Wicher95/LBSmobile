@@ -3,9 +3,12 @@ package javy.od.swiry.lbsmobile;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 
@@ -55,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             startActivity(new Intent(this, MainMenuActivity.class));
         }
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
     }
     @Override
     protected void onResume(){
@@ -64,6 +72,17 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             startActivity(new Intent(this, MainMenuActivity.class));
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                startActivity(new Intent(this, StartActivity.class));
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void click(View view) {
