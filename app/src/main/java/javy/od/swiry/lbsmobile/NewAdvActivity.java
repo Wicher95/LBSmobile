@@ -37,7 +37,10 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import javy.od.swiry.lbsmobile.models.Advert;
@@ -152,56 +155,63 @@ public class NewAdvActivity extends AppCompatActivity {
     public void Apply(View v)
     {
         if(imageAdded) {
-            progressDialog.setMessage("Dodawanie ogłoszenia");
-            progressDialog.show();
-            try {
-                FirebaseUser user = firebase.getCurrentUser();
-                uid = user.getUid();
-                Advert advert = new Advert();
-                advert.setTitle(mTitle.getText().toString());
-                advert.setCategory(mCategory.getText().toString());
-                advert.setPrice(mPrice.getText().toString());
-                advert.setDescription(mDescription.getText().toString());
-                advert.setLocalization(mLocalization.getText().toString());
-                advert.setPhone(mPhone.getText().toString());
-                Calendar mCurrentDate = Calendar.getInstance();
-                int month = mCurrentDate.get(Calendar.MONTH) + 1;
-                int day = mCurrentDate.get(Calendar.DAY_OF_MONTH);
-                String date = String.valueOf(day) + " " + String.valueOf(month);
-                advert.setDate(date);
-                // Write a message to the database
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
+            if(!mTitle.getText().toString().equals("") && !mDescription.getText().toString().equals("")
+                    && !mPrice.getText().toString().equals("") && !mCategory.getText().toString().equals("") ) {
+                progressDialog.setMessage("Dodawanie ogłoszenia");
+                progressDialog.show();
+                try {
+                    FirebaseUser user = firebase.getCurrentUser();
+                    uid = user.getUid();
+                    Advert advert = new Advert();
+                    advert.setTitle(mTitle.getText().toString());
+                    advert.setCategory(mCategory.getText().toString());
+                    advert.setPrice(mPrice.getText().toString());
+                    advert.setDescription(mDescription.getText().toString());
+                    advert.setLocalization(mLocalization.getText().toString());
+                    advert.setPhone(mPhone.getText().toString());
+                    Calendar mCurrentDate = Calendar.getInstance();
+                    int month = mCurrentDate.get(Calendar.MONTH);
+                    String monthName = new DateFormatSymbols(Locale.getDefault()).getShortMonths()[month];
+                    String capMonthName = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
+                    int day = mCurrentDate.get(Calendar.DAY_OF_MONTH);
+                    String date = String.valueOf(day) + " " + String.valueOf(capMonthName);
+                    advert.setDate(date);
+                    // Write a message to the database
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-                advertID = new AdvertCount();
-                if (count != null) {
-                    String x = String.valueOf(Integer.valueOf(count) + 1);
-                    advertID.setCount(x);
-                } else {
-                    advertID.setCount("0");
+                    advertID = new AdvertCount();
+                    if (count != null) {
+                        String x = String.valueOf(Integer.valueOf(count) + 1);
+                        advertID.setCount(x);
+                    } else {
+                        advertID.setCount("0");
+                    }
+
+                    DatabaseReference mDatabase = database.getReference();
+
+                    mDatabase.child("advertID").child(uid).setValue(advertID);
+
+                    mDatabase.child("adverts").child(uid + "_" + advertID.getCount()).setValue(advert)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    addImage();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(NewAdvActivity.this, "Nie udało się dodać ogłoszenia", Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                }
+                            });
+                } catch (Exception e) {
+                    Toast.makeText(NewAdvActivity.this, "Nie udało się dodać ogłoszenia", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                    e.printStackTrace();
                 }
-
-                DatabaseReference mDatabase = database.getReference();
-
-                mDatabase.child("advertID").child(uid).setValue(advertID);
-
-                mDatabase.child("adverts").child(uid + "_" + advertID.getCount()).setValue(advert)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                addImage();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(NewAdvActivity.this, "Nie udało się dodać ogłoszenia", Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                            }
-                        });
-            } catch (Exception e) {
-                Toast.makeText(NewAdvActivity.this, "Nie udało się dodać ogłoszenia", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-                e.printStackTrace();
+            } else {
+                Toast.makeText(this,"Musisz podać wymagane dane",Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(this,"Musisz dodać zdjęcie",Toast.LENGTH_SHORT).show();

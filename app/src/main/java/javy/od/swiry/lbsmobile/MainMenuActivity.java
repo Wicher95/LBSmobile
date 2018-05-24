@@ -149,7 +149,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Advert advert = ds.getValue(Advert.class);
                     if(advert != null) {
-                        listAdverts.add(advert);
+                        listAdverts.add(0,advert);
                     }
                 }
                 displayAdv();
@@ -216,7 +216,8 @@ public class MainMenuActivity extends AppCompatActivity {
             mainText.setText(listAdverts.get(position).getTitle());
             city.setText(listAdverts.get(position).getLocalization());
             date.setText(listAdverts.get(position).getDate());
-            price.setText(listAdverts.get(position).getPrice());
+            String sPrice = listAdverts.get(position).getPrice() + " zł";
+            price.setText(sPrice);
             return convertView;
         }
     }
