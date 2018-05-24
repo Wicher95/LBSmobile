@@ -22,10 +22,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +42,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javy.od.swiry.lbsmobile.models.Advert;
 
@@ -50,11 +55,21 @@ public class MainMenuActivity extends AppCompatActivity {
     private ArrayList<Advert> listAdverts = new ArrayList<>();
     private File tmpFile;
     private ProgressDialog progressDialog;
+    private boolean gotResult;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        //Sprawdzenie czy użytkownik jest zalogowany
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
+            Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
@@ -87,6 +102,9 @@ public class MainMenuActivity extends AppCompatActivity {
                         else if(itemTitle.equals("Wiadomości"))
                         {
                             //startActivity(new Intent(MainActivity.this,AddShopActivity.class));
+                        } else if(itemTitle.equals("Wyloguj się")) {
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(MainMenuActivity.this, StartActivity.class));
                         }
                         return true;
                     }
@@ -109,7 +127,13 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onResume()
     {
         super.onResume();
-        //generateAdv();
+        //Sprawdzenie czy użytkownik jest zalogowany
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
+            Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        }
+        generateAdv();
     }
 
 
@@ -120,6 +144,7 @@ public class MainMenuActivity extends AppCompatActivity {
         adverts.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                gotResult = true;
                 listAdverts.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Advert advert = ds.getValue(Advert.class);
@@ -131,9 +156,24 @@ public class MainMenuActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                gotResult = true;
             }
         });
+        timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+                if (!gotResult) { //  Timeout
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(MainMenuActivity.this, StartActivity.class);
+                    intent.putExtra("fail","true");
+                    startActivity(intent);
+                }
+            }
+        };
+        // Setting timeout of 10 sec to the request
+        timer.schedule(timerTask, 10000L);
     }
     public void displayAdv(){
         if(listAdverts.size() > 0) {

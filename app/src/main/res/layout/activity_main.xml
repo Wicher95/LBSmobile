@@ -13,34 +13,12 @@
         tools:layout_editor_absoluteY="0dp">
 
         <EditText
-            android:id="@+id/isLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:singleLine="false"
-            android:text="@string/not_login" />
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/isLogin"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="21dp"
-            android:onClick="facebookLogin" />
-
-        <EditText
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/login_button"
-            android:layout_marginTop="16dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:hint="Email"
             android:inputType="textPersonName"
@@ -51,12 +29,11 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/etUsername"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="20dp"
             android:ems="10"
-            android:hint="Password"
+            android:hint="Hasło"
             android:inputType="textPassword"
             app:layout_constraintTop_toBottomOf="@+id/etUsername"
             tools:layout_editor_absoluteX="0dp" />
@@ -66,12 +43,19 @@
             android:layout_width="158dp"
             android:layout_height="56dp"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="Login"
+            android:layout_below="@+id/etPassword"
+            android:layout_marginTop="20dp"
             android:onClick="login"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+            android:text="Zaloguj"/>
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bLogin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Nie masz konta? Zarejestruj się:"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/Register"
@@ -79,10 +63,10 @@
             android:layout_height="56dp"
             android:layout_alignLeft="@+id/bLogin"
             android:layout_alignStart="@+id/bLogin"
-            android:layout_below="@+id/bLogin"
-            android:layout_marginTop="12dp"
+            android:layout_below="@+id/textView2"
+            android:layout_marginTop="10dp"
             android:onClick="click"
-            android:text="Register"
+            android:text="Zarejestruj"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bLogin" />

@@ -4,6 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -11,15 +15,33 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        //Sprawdzenie czy użytkownik jest zalogowany
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            startActivity(new Intent(this, MainMenuActivity.class));
+        }
+        if(getIntent().getStringExtra("fail") != null) {
+            Toast.makeText(StartActivity.this,"Błąd połączenia z internetem",Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public void gmailChange(View view) {
-        Intent myIntent = new Intent(this, RegisterActivity.class);
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //Sprawdzenie czy użytkownik jest zalogowany
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            startActivity(new Intent(this, MainMenuActivity.class));
+        }
+    }
+
+    public void login(View view) {
+        Intent myIntent = new Intent(this, MainActivity.class);
         startActivity(myIntent);
     }
 
-    public void facebookChange(View view) {
-        Intent myIntent = new Intent(this, MainActivity.class);
+    public void register(View view) {
+        Intent myIntent = new Intent(this, RegisterActivity.class);
         startActivity(myIntent);
     }
 }
