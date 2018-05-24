@@ -41,10 +41,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenuActivity" />
+        <activity android:name=".MainMenuActivity"
+            android:label="Ogłoszenia"/>
         <activity android:name=".ProgramActivity" />
-        <activity android:name=".NewAdvActivity" />
-        <activity android:name=".UserAdvActivity"></activity>
+        <activity android:name=".NewAdvActivity"
+            android:label="Dodaj ogłoszenie"/>
+        <activity android:name=".UserAdvActivity"
+            android:label="Moje ogłoszenia">
+        </activity>
     </application>
 
 </manifest>
