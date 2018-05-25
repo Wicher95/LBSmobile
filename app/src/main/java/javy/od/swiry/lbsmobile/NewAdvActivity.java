@@ -182,7 +182,8 @@ public class NewAdvActivity extends AppCompatActivity {
                     advert.setPhone(mPhone.getText().toString());
                     Calendar mCurrentDate = Calendar.getInstance();
                     int month = mCurrentDate.get(Calendar.MONTH);
-                    String monthName = new DateFormatSymbols(Locale.getDefault()).getShortMonths()[month];
+                    Locale poland = new Locale("pl","PL");
+                    String monthName = new DateFormatSymbols(poland).getShortMonths()[month];
                     String capMonthName = monthName.substring(0, 1).toUpperCase() + monthName.substring(1);
                     int day = mCurrentDate.get(Calendar.DAY_OF_MONTH);
                     String date = String.valueOf(day) + " " + String.valueOf(capMonthName);
