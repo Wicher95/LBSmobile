@@ -26,36 +26,46 @@
             android:text="Aby rozpocząć musisz sie zalogować"
             android:textSize="20sp"/>
 
-        <TextView
+        <Button
             android:id="@+id/login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true"
+            android:background="#8DC349"
+            android:textColor="@android:color/white"
             android:layout_marginTop="5dp"
+            android:padding="14px"
             android:text="Zaloguj"
-            android:textSize="45sp"
-            android:textColor="@android:color/black"
+            android:textSize="42sp"
             android:onClick="login"/>
+
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/register"
+            android:layout_below="@+id/login"
+            android:layout_marginTop="22sp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
             android:text="Nie masz konta? Zarejestruj się:"
             android:textSize="20sp" />
-        <TextView
+
+        <Button
             android:id="@+id/register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:background="#EE7B1E"
+            android:textColor="@android:color/white"
+            android:padding="14px"
+            android:layout_below="@+id/textView2"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
             android:text="Zarejestruj"
-            android:textSize="30sp"
+            android:textSize="22sp"
             android:onClick="register"/>
+
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

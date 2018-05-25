@@ -26,9 +26,10 @@
 
         <EditText
             android:id="@+id/etUsername"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="20dp"
             android:ems="10"
@@ -39,6 +40,8 @@
 
         <EditText
             android:id="@+id/etPassword"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -52,11 +55,15 @@
 
         <Button
             android:id="@+id/bLogin"
-            android:layout_width="158dp"
-            android:layout_height="56dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#8DC349"
+            android:textColor="@android:color/white"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/etPassword"
             android:layout_marginTop="20dp"
+            android:padding="14px"
+            android:textSize="36sp"
             android:onClick="login"
             android:text="Zaloguj"/>
         <TextView
@@ -71,12 +78,15 @@
 
         <Button
             android:id="@+id/Register"
-            android:layout_width="158dp"
-            android:layout_height="56dp"
-            android:layout_alignLeft="@+id/bLogin"
-            android:layout_alignStart="@+id/bLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#EE7B1E"
+            android:textColor="@android:color/white"
+            android:padding="14px"
+            android:layout_centerHorizontal="true"
             android:layout_below="@+id/textView2"
             android:layout_marginTop="10dp"
+            android:textSize="18sp"
             android:onClick="click"
             android:text="Zarejestruj"
             app:layout_constraintEnd_toEndOf="parent"
