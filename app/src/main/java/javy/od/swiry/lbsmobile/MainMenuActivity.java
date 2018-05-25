@@ -15,6 +15,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,9 +41,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.zxing.common.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,6 +60,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mAdvertList;
     private ArrayList<Advert> listAdverts = new ArrayList<>();
+    private ArrayList<Advert> listFiltered = new ArrayList<>();
     private ArrayList<String> listIDs = new ArrayList<>();
     private File tmpFile;
     private ProgressDialog progressDialog;
@@ -125,6 +131,59 @@ public class MainMenuActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu,menu);
+        MenuItem item = menu.findItem(R.id.menuSearch);
+        SearchView searchView = (SearchView) item.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                stripAccents(query);
+                listFiltered.clear();
+                for(Advert a:listAdverts)
+                {
+                    String x = stripAccents(a.getTitle().toLowerCase());
+                    if(x.contains(query.toLowerCase())) {
+                        listFiltered.add(a);
+                    }
+                }
+                displayFilteredAdv();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.equals("")) {
+                    displayAdv();
+                }
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public static String stripAccents(String s)
+    {
+        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        s = s.replace("ł","l");
+        s = s.replace("Ł", "L");
+        return s;
+    }
+
+    public void displayFilteredAdv(){
+        if(listFiltered.size() > 0) {
+            Collections.sort(listFiltered,TimeComparator);
+            FilteredCustomAdapter customAdapter = new FilteredCustomAdapter();
+            mAdvertList.setAdapter(customAdapter);
+        } else {
+            Toast.makeText(getApplicationContext(),"Brak wyników",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -243,6 +302,45 @@ public class MainMenuActivity extends AppCompatActivity {
             city.setText(listAdverts.get(position).getLocalization());
             date.setText(listAdverts.get(position).getDate());
             String sPrice = listAdverts.get(position).getPrice() + " zł";
+            price.setText(sPrice);
+            return convertView;
+        }
+    }
+
+    public class FilteredCustomAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return listFiltered.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @SuppressLint("ViewHolder")
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            convertView = getLayoutInflater().inflate(R.layout.adv_adapter, null);
+            TextView advID = convertView.findViewById(R.id.advID);
+            ImageView mainImage = convertView.findViewById(R.id.image);
+            TextView mainText = convertView.findViewById(R.id.name);
+            TextView city = convertView.findViewById(R.id.city);
+            TextView date = convertView.findViewById(R.id.date);
+            TextView price = convertView.findViewById(R.id.price);
+
+            advID.setText(listFiltered.get(position).getID());
+            Glide.with(MainMenuActivity.this).load(listFiltered.get(position).getUrl()).into(mainImage);
+            mainText.setText(listFiltered.get(position).getTitle());
+            city.setText(listFiltered.get(position).getLocalization());
+            date.setText(listFiltered.get(position).getDate());
+            String sPrice = listFiltered.get(position).getPrice() + " zł";
             price.setText(sPrice);
             return convertView;
         }
