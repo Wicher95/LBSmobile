@@ -351,4 +351,23 @@ public class EditAdvActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> arg0) { }
         });
     }
+
+    public void Delete(View v){
+        StorageReference image = mStorageRef.child(ID + ".jpg");
+        image.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+            }
+        });
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("adverts").child(ID).removeValue();
+        Toast.makeText(mContext,"Usunięto ogłoszenie",Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(mContext,UserAdvActivity.class));
+    }
 }

@@ -117,15 +117,30 @@
                 android:layout_marginTop="10dp"
                 android:inputType="phone"
                 android:maxLength="9"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/phone"
+                android:layout_marginTop="10dp"
+                android:layout_centerHorizontal="true">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
                 android:id="@+id/apply"
-                android:text="@string/adv_apply"
-                android:layout_below="@+id/phone"
-                android:onClick="Apply"/>
+                android:text="Zaktualizuj"
+                android:layout_marginEnd="20dp"
+                android:onClick="Apply"
+                android:backgroundTint="@android:color/holo_green_dark"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/delete"
+                android:text="Usuń"
+                android:layout_toEndOf="@+id/apply"
+                android:layout_marginStart="10dp"
+                android:onClick="Delete"
+                android:backgroundTint="@android:color/holo_red_dark"/>
+            </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
