@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,31 +17,16 @@
             android:theme="@style/ToolBarStyle" />
     </RelativeLayout>
 
-
-    <EditText
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:id="@+id/etName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="65dp"
-        android:hint="Name"
-        android:inputType="textPersonName"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
-
     <EditText
         android:id="@+id/etUsername"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="65dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="Email"
-        app:layout_constraintTop_toBottomOf="@+id/etName"
-        tools:layout_editor_absoluteX="0dp" />
+        android:hint="Email" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -49,12 +34,23 @@
         android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/etUsername"
         android:ems="10"
-        android:hint="Password"
+        android:hint="Hasło"
         android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@+id/etUsername"
         tools:layout_editor_absoluteX="0dp" />
+    <EditText
+        android:id="@+id/etRepeatPassword"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/etPassword"
+        android:ems="10"
+        android:hint="Powtórz hasło"
+        android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/bRegister"
@@ -62,26 +58,10 @@
         android:layout_height="wrap_content"
         android:background="#EE7B1E"
         android:textColor="@android:color/white"
+        android:layout_below="@+id/etRepeatPassword"
         android:padding="14px"
         android:textSize="18sp"
         android:text="Zarejestruj"
-        android:layout_below="@+id/etAge"
-        android:layout_marginTop="5dp"
-        android:layout_centerHorizontal="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAge" />
-
-    <EditText
-        android:id="@+id/etAge"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Age"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"
-        tools:layout_editor_absoluteX="0dp" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
