@@ -223,6 +223,7 @@ public class EditAdvActivity extends AppCompatActivity {
                     advert.setLocalization(mLocalization.getText().toString());
                     advert.setPhone(mPhone.getText().toString());
                     advert.setDate(date);
+                    advert.setTime(mAdvert.getTime());
                     // Write a message to the database
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
 

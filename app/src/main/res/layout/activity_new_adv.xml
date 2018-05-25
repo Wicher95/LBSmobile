@@ -82,7 +82,8 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/category"
             android:layout_marginTop="10dp"
-            android:inputType="number" />
+            android:inputType="number"
+            android:maxLength="9"/>
         <MultiAutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_marginLeft="30dp"
@@ -104,7 +105,8 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/description"
             android:layout_marginTop="10dp"
-            android:maxLength="32"/>
+            android:maxLength="32"
+            android:inputType="text|textNoSuggestions"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_marginLeft="30dp"
