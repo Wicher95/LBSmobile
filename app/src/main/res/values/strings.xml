@@ -17,4 +17,22 @@
 
     <string name="facebook_app_id">1661107873985559</string>
     <string name="fb_login_protocol_scheme">fb1661107873985559</string>
+
+    <string-array name="Categories">
+        <item>Motoryzacja</item>
+        <item>Elektronika</item>
+        <item>Dla Dzieci</item>
+        <item>Ślub i Wesele</item>
+        <item>Moda</item>
+        <item>Sport i Hobby</item>
+        <item>Rolnictwo</item>
+        <item>Praca</item>
+        <item>Muzyka i Edukacja</item>
+        <item>Moda</item>
+        <item>Sport i Hobby</item>
+        <item>Dom i Ogród</item>
+        <item>Noclegi</item>
+    </string-array>
+
+
 </resources>

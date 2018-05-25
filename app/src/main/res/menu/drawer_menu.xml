@@ -5,18 +5,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_new_advert"
-            android:title="@string/new_adv" />
+            android:title="@string/new_adv"
+            android:icon="@drawable/ic_add" />
         <item
             android:id="@+id/nav_advert"
-            android:title="@string/advertisements" />
+            android:title="@string/advertisements"
+            android:icon="@drawable/ic_adv"/>
         <item
             android:id="@+id/nav_my_advert"
-            android:title="@string/my_advertisements" />
+            android:title="@string/my_advertisements"
+            android:icon="@drawable/ic_my_adv"/>
         <item
             android:id="@+id/nav_messages"
-            android:title="@string/messages" />
+            android:title="@string/messages"
+            android:icon="@drawable/ic_msg"/>
         <item
             android:id="@+id/nav_logout"
-            android:title="Wyloguj się" />
+            android:title="Wyloguj się"
+            android:icon="@drawable/ic_exit"/>
     </group>
 </menu>
