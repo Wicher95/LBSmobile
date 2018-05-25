@@ -23,14 +23,24 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="100dp"
+        <HorizontalScrollView
+            android:id="@+id/scrollGallery"
+            android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:id="@+id/gallery"
-            android:background="@android:color/black"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:scaleType="centerCrop"/>
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/gallery"
+                    android:src="@drawable/add_picture"
+                    android:scaleType="centerCrop"/>
+            </LinearLayout>
+        </HorizontalScrollView>
 
         <EditText
             android:layout_width="match_parent"
@@ -40,9 +50,20 @@
             android:id="@+id/title"
             android:hint="@string/adv_title"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/gallery"
+            android:layout_below="@+id/scrollGallery"
+            android:layout_marginTop="10dp"
+            android:maxLength="32"/>
+
+        <TextView
+            android:id="@+id/textCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/title"
+            android:layout_below="@+id/title"
+            android:text="Kategoria:"
+            android:textSize="12sp"
             android:layout_marginTop="10dp"/>
-        <EditText
+        <Spinner
             android:layout_width="match_parent"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
@@ -50,8 +71,7 @@
             android:id="@+id/category"
             android:hint="@string/adv_category"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/title"
-            android:layout_marginTop="10dp"/>
+            android:layout_below="@+id/textCategory"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_marginLeft="30dp"
@@ -72,7 +92,8 @@
             android:hint="@string/adv_description"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/price"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:maxLength="4096"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_marginLeft="30dp"
@@ -82,7 +103,8 @@
             android:hint="@string/adv_localization"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/description"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:maxLength="32"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_marginLeft="30dp"
@@ -93,7 +115,8 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/localization"
             android:layout_marginTop="10dp"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:maxLength="9"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

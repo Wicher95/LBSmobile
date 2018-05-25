@@ -18,8 +18,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,7 +55,7 @@ public class NewAdvActivity extends AppCompatActivity {
 
     private ImageView mGallery;
     private EditText mTitle;
-    private EditText mCategory;
+    //private EditText mCategory;
     private EditText mDescription;
     private EditText mLocalization;
     private EditText mPhone;
@@ -67,6 +70,7 @@ public class NewAdvActivity extends AppCompatActivity {
     private boolean imageAdded;
     private AdvertCount advertID;
     private DrawerLayout mDrawerLayout;
+    private Spinner mCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +88,14 @@ public class NewAdvActivity extends AppCompatActivity {
         mGallery = findViewById(R.id.gallery);
         galleryOnClick();
         mTitle = findViewById(R.id.title);
+
         mCategory = findViewById(R.id.category);
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Categories));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mCategory.setAdapter(myAdapter);
+        categoryHandler();
+
         mDescription = findViewById(R.id.description);
         mLocalization = findViewById(R.id.localization);
         mPhone = findViewById(R.id.phone);
@@ -156,7 +167,7 @@ public class NewAdvActivity extends AppCompatActivity {
     {
         if(imageAdded) {
             if(!mTitle.getText().toString().equals("") && !mDescription.getText().toString().equals("")
-                    && !mPrice.getText().toString().equals("") && !mCategory.getText().toString().equals("") ) {
+                    && !mPrice.getText().toString().equals("")) {
                 progressDialog.setMessage("Dodawanie ogłoszenia");
                 progressDialog.show();
                 try {
@@ -164,7 +175,7 @@ public class NewAdvActivity extends AppCompatActivity {
                     uid = user.getUid();
                     Advert advert = new Advert();
                     advert.setTitle(mTitle.getText().toString());
-                    advert.setCategory(mCategory.getText().toString());
+                    advert.setCategory(mCategory.getSelectedItem().toString());
                     advert.setPrice(mPrice.getText().toString());
                     advert.setDescription(mDescription.getText().toString());
                     advert.setLocalization(mLocalization.getText().toString());
@@ -266,6 +277,26 @@ public class NewAdvActivity extends AppCompatActivity {
             try {
                 Uri imageUri = data.getData();
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                int maxWidth = 512;
+                int maxHeight = 512;
+                int width = bitmap.getWidth();
+                int height = bitmap.getHeight();
+                if (width > height) {
+                    // landscape
+                    float ratio = (float) width / maxWidth;
+                    width = maxWidth;
+                    height = (int)(height / ratio);
+                } else if (height > width) {
+                    // portrait
+                    float ratio = (float) height / maxHeight;
+                    height = maxHeight;
+                    width = (int)(width / ratio);
+                } else {
+                    // square
+                    height = maxHeight;
+                    width = maxWidth;
+                }
+                bitmap = bitmap.createScaledBitmap(bitmap,width,height,true);
                 mGallery.setImageBitmap(bitmap);
                 file = imageUri;
                 imageAdded = true;
@@ -275,5 +306,16 @@ public class NewAdvActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void categoryHandler(){
+        mCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View view, int position, long id) {
+
+            }
+            public void onNothingSelected(AdapterView<?> arg0) { }
+        });
     }
 }
