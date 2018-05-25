@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity"
-            android:label="Zaloguj"/>
+        <activity
+            android:name=".MainActivity"
+            android:label="Zaloguj" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -34,8 +35,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"
-            android:label="Zarejestruj"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Zarejestruj" />
         <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,14 +45,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenuActivity"
-            android:label="Ogłoszenia"/>
+        <activity
+            android:name=".MainMenuActivity"
+            android:label="Ogłoszenia" />
         <activity android:name=".ProgramActivity" />
-        <activity android:name=".NewAdvActivity"
-            android:label="Dodaj ogłoszenie"/>
-        <activity android:name=".UserAdvActivity"
-            android:label="Moje ogłoszenia">
-        </activity>
+        <activity
+            android:name=".NewAdvActivity"
+            android:label="Dodaj ogłoszenie" />
+        <activity
+            android:name=".UserAdvActivity"
+            android:label="Moje ogłoszenia"/>
+        <activity android:name=".DisplayAdvActivity"
+            android:label=""/>
     </application>
 
 </manifest>
