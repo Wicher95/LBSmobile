@@ -159,6 +159,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 gotResult = true;
+                progressDialog.dismiss();
             }
         });
         timer = new Timer();
