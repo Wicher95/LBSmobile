@@ -196,7 +196,7 @@ public class MainMenuActivity extends AppCompatActivity {
             startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
         }
-        generateAdv();
+        //generateAdv();
     }
 
 
