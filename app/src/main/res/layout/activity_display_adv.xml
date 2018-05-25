@@ -7,9 +7,20 @@
     tools:context=".DisplayAdvActivity"
     android:id="@+id/menu">
 
+    <ImageView
+        android:id="@+id/fullImage2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:scaleType="fitCenter"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="invisible"/>
+
     <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -95,6 +106,16 @@
                 android:text="Opole"/>
         </RelativeLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/fullImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:scaleType="fitCenter"
+        android:focusable="true"
+        android:clickable="true"
+        android:visibility="gone"/>
 
 
     <RelativeLayout

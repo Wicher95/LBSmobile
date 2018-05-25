@@ -3,7 +3,12 @@ package javy.od.swiry.lbsmobile;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
@@ -47,6 +53,8 @@ public class DisplayAdvActivity extends AppCompatActivity {
     private MultiAutoCompleteTextView mDescription;
     private TextView mLocalization;
     private TextView mPhone;
+    private ImageView mFullImage;
+    private ImageView mFullImage2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +77,8 @@ public class DisplayAdvActivity extends AppCompatActivity {
         mDescription = findViewById(R.id.description);
         mLocalization = findViewById(R.id.localization);
         mPhone = findViewById(R.id.phone);
+        mFullImage = findViewById(R.id.fullImage);
+        mFullImage2 = findViewById(R.id.fullImage2);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -135,6 +145,15 @@ public class DisplayAdvActivity extends AppCompatActivity {
         downloadAdv();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(mFullImage.getVisibility() == View.VISIBLE) {
+            mFullImage.setVisibility(View.GONE);
+        } else {
+            finish();
+        }
+    }
+
     public void downloadAdv(){
         progressDialog.setMessage("Wczytywanie ogłoszenia");
         progressDialog.show();
@@ -182,8 +201,23 @@ public class DisplayAdvActivity extends AppCompatActivity {
         mLocalization.setText(mAdvert.getLocalization());
         mPhone.setText(mAdvert.getPhone());
         Glide.with(mContext).load(mAdvert.getUrl()).into(mImage);
+        Glide.with(mContext).load(mAdvert.getUrl()).into(mFullImage2);
+
         if(progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+        mImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFullImage.setImageDrawable(mFullImage2.getDrawable());
+                mFullImage.setVisibility(View.VISIBLE);
+            }
+        });
+        mFullImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFullImage.setVisibility(View.GONE);
+            }
+        });
     }
 }
