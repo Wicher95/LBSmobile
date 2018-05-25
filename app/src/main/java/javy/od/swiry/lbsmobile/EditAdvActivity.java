@@ -122,7 +122,7 @@ public class EditAdvActivity extends AppCompatActivity {
                         String itemTitle = String.valueOf(menuItem.getTitle());
                         if(itemTitle.equals("Dodaj ogłoszenie"))
                         {
-                            //startActivity(new Intent(NewAdvActivity.this,NewAdvActivity.class));
+                            startActivity(new Intent(mContext,NewAdvActivity.class));
                         }
                         else if(itemTitle.equals("Ogłoszenia"))
                         {
@@ -202,6 +202,12 @@ public class EditAdvActivity extends AppCompatActivity {
         mLocalization.setText(mAdvert.getLocalization());
         mPhone.setText(mAdvert.getPhone());
         Glide.with(mContext).load(mAdvert.getUrl()).into(mGallery);
+
+        String spinnerValue = mAdvert.getCategory();
+        ArrayAdapter myAdap = (ArrayAdapter) mCategory.getAdapter();
+        int spinnerPosition = myAdap.getPosition(spinnerValue);
+        mCategory.setSelection(spinnerPosition);
+
         imageAdded = true;
         imageNotChanged = true;
         progressDialog2.dismiss();
