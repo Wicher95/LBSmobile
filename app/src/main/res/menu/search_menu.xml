@@ -7,4 +7,9 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always">
     </item>
+    <item android:id="@+id/menuFilter"
+        android:title="Filter"
+        android:icon="@drawable/ic_filter"
+        app:showAsAction="ifRoom">
+    </item>
 </menu>
