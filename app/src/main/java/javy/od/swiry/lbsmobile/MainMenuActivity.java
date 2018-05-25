@@ -61,8 +61,6 @@ public class MainMenuActivity extends AppCompatActivity {
     private ListView mAdvertList;
     private ArrayList<Advert> listAdverts = new ArrayList<>();
     private ArrayList<Advert> listFiltered = new ArrayList<>();
-    private ArrayList<String> listIDs = new ArrayList<>();
-    private File tmpFile;
     private ProgressDialog progressDialog;
     private boolean gotResult;
     private Timer timer;
