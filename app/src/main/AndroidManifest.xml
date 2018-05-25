@@ -54,9 +54,11 @@
             android:label="Dodaj ogłoszenie" />
         <activity
             android:name=".UserAdvActivity"
-            android:label="Moje ogłoszenia"/>
-        <activity android:name=".DisplayAdvActivity"
-            android:label=""/>
+            android:label="Moje ogłoszenia" />
+        <activity
+            android:name=".DisplayAdvActivity"
+            android:label="" />
+        <activity android:name=".EditAdvActivity"></activity>
     </application>
 
 </manifest>

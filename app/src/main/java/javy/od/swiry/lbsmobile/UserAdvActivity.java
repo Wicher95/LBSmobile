@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -98,6 +99,7 @@ public class UserAdvActivity extends AppCompatActivity {
                     }
                 });
         generateAdv();
+        listHandler();
     }
     //Otwieranie bocznego menu przyciskiem z toolbara
     @Override
@@ -120,6 +122,19 @@ public class UserAdvActivity extends AppCompatActivity {
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
         }
         generateAdv();
+    }
+
+    private void listHandler() {
+        mAdvertList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int i, long l) {
+                TextView textView = v.findViewById(R.id.advID);
+                String advID = (String)textView.getText();
+                Intent intent = new Intent(getApplicationContext(), EditAdvActivity.class);
+                intent.putExtra("ID", advID);
+                startActivity(intent);
+            }
+        });
     }
 
 
