@@ -187,6 +187,7 @@ public class NewAdvActivity extends AppCompatActivity {
                     int day = mCurrentDate.get(Calendar.DAY_OF_MONTH);
                     String date = String.valueOf(day) + " " + String.valueOf(capMonthName);
                     advert.setDate(date);
+                    advert.setTime(String.valueOf(mCurrentDate.getTimeInMillis()));
                     // Write a message to the database
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
 

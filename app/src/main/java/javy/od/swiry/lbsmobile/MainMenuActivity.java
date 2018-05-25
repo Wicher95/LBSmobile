@@ -42,6 +42,8 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -148,12 +150,11 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 gotResult = true;
                 listAdverts.clear();
-                listIDs.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Advert advert = ds.getValue(Advert.class);
                     if(advert != null) {
+                        advert.setID(ds.getKey());
                         listAdverts.add(0,advert);
-                        listIDs.add(0,ds.getKey());
                     }
                 }
                 displayAdv();
@@ -161,7 +162,9 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 gotResult = true;
-                progressDialog.dismiss();
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
             }
         });
         timer = new Timer();
@@ -182,10 +185,13 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     public void displayAdv(){
         if(listAdverts.size() > 0) {
+            Collections.sort(listAdverts,TimeComparator);
             CustomAdapter customAdapter = new CustomAdapter();
             mAdvertList.setAdapter(customAdapter);
         }
-        progressDialog.dismiss();
+        if(progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     private void listHandler() {
@@ -231,7 +237,7 @@ public class MainMenuActivity extends AppCompatActivity {
             TextView date = convertView.findViewById(R.id.date);
             TextView price = convertView.findViewById(R.id.price);
 
-            advID.setText(listIDs.get(position));
+            advID.setText(listAdverts.get(position).getID());
             Glide.with(MainMenuActivity.this).load(listAdverts.get(position).getUrl()).into(mainImage);
             mainText.setText(listAdverts.get(position).getTitle());
             city.setText(listAdverts.get(position).getLocalization());
@@ -241,4 +247,15 @@ public class MainMenuActivity extends AppCompatActivity {
             return convertView;
         }
     }
+
+    public Comparator<Advert> TimeComparator
+            = new Comparator<Advert>() {
+        public int compare(Advert d1, Advert d2) {
+            if (d1.getTime() != null && d2.getTime() != null) {
+                return (int)(Long.valueOf(d2.getTime()) - Long.valueOf(d1.getTime()));
+            } else {
+                return 0;
+            }
+        }
+    };
 }

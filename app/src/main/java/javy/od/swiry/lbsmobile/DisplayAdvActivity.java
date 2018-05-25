@@ -139,7 +139,7 @@ public class DisplayAdvActivity extends AppCompatActivity {
         progressDialog.setMessage("Wczytywanie ogłoszenia");
         progressDialog.show();
         DatabaseReference adverts = FirebaseDatabase.getInstance().getReference("adverts");
-        adverts.child(ID).addValueEventListener(new ValueEventListener() {
+        adverts.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 gotResult = true;
@@ -152,7 +152,9 @@ public class DisplayAdvActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 gotResult = true;
-                progressDialog.dismiss();
+                if(progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
             }
         });
         timer = new Timer();
@@ -180,6 +182,8 @@ public class DisplayAdvActivity extends AppCompatActivity {
         mLocalization.setText(mAdvert.getLocalization());
         mPhone.setText(mAdvert.getPhone());
         Glide.with(mContext).load(mAdvert.getUrl()).into(mImage);
-        progressDialog.dismiss();
+        if(progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }

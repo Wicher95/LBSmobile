@@ -162,7 +162,7 @@ public class EditAdvActivity extends AppCompatActivity {
         progressDialog2.setMessage("Wczytywanie danych");
         progressDialog2.show();
         DatabaseReference adverts = FirebaseDatabase.getInstance().getReference("adverts");
-        adverts.child(ID).addValueEventListener(new ValueEventListener() {
+        adverts.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 gotResult = true;
