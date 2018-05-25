@@ -31,6 +31,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         private Button bRegister;
         private EditText etPassword;
         private EditText etUsername;
+        private EditText etRepeatPassword;
 
         private ProgressDialog progressDialog;
 
@@ -47,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             bRegister = findViewById(R.id.bRegister);
             etPassword = findViewById(R.id.etPassword);
             etUsername = findViewById(R.id.etUsername);
+            etRepeatPassword = findViewById(R.id.etRepeatPassword);
 
             bRegister.setOnClickListener(this);
             Toolbar toolbar = findViewById(R.id.toolbar);
@@ -76,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         private void registerUser() {
             String email = etUsername.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
+            String passwordRepeated = etRepeatPassword.getText().toString().trim();
 
             if (TextUtils.isEmpty(email)) {
                 Toast.makeText(this, "Prosze wprowadz email", Toast.LENGTH_SHORT).show();
@@ -84,6 +87,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             if (TextUtils.isEmpty(password)) {
                 Toast.makeText(this, "Prosze wprowadz haslo", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(!password.equals(passwordRepeated)) {
+                Toast.makeText(this, "Podane hasła nie są takie same", Toast.LENGTH_SHORT).show();
                 return;
             }
             progressDialog.setMessage("Rejestrowanie użytkownika");
