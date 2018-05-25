@@ -21,7 +21,7 @@ public class StartActivity extends AppCompatActivity {
             startActivity(new Intent(this, MainMenuActivity.class));
         }
         if(getIntent().getStringExtra("fail") != null) {
-            Toast.makeText(StartActivity.this,"Błąd połączenia z internetem",Toast.LENGTH_SHORT).show();
+            Toast.makeText(StartActivity.this,"Błąd połączenia, zaloguj się ponownie",Toast.LENGTH_SHORT).show();
         }
     }
 
