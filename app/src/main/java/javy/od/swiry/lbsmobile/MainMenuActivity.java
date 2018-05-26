@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +56,7 @@ public class MainMenuActivity extends AppCompatActivity {
     public static String searchCategory;
     private String searchText;
     private ImageView mBackground;
+    private boolean mNeedLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +127,7 @@ public class MainMenuActivity extends AppCompatActivity {
         }
         mBackground.setVisibility(View.GONE);
         if(searchCategory == null && searchText.equals("")) {
+            mNeedLoad = false;
             setTitle("Ogłoszenia");
             displayAdv();
         } else if(searchCategory != null || !searchText.equals("")) {
@@ -189,6 +192,9 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void filterResults(String query) {
+        if(!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
         listFiltered.clear();
         for(Advert a:listAdverts)
         {
@@ -225,10 +231,13 @@ public class MainMenuActivity extends AppCompatActivity {
             mAdvertList.setAdapter(null);
             Toast.makeText(getApplicationContext(),"Brak wyników",Toast.LENGTH_SHORT).show();
         }
+        progressDialog.dismiss();
     }
 
     public void generateAdv() {
         progressDialog.setMessage("Wczytywanie ogłoszeń");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
         progressDialog.show();
         DatabaseReference adverts = FirebaseDatabase.getInstance().getReference("adverts");
         adverts.addValueEventListener(new ValueEventListener() {
@@ -245,8 +254,14 @@ public class MainMenuActivity extends AppCompatActivity {
                 }
                 if(searchCategory != null || !searchText.equals("")) {
                     filterResults(searchText);
+                    if(progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                 } else {
                     displayAdv();
+                    if(progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                 }
             }
             @Override
@@ -278,9 +293,6 @@ public class MainMenuActivity extends AppCompatActivity {
             Collections.sort(listAdverts,TimeComparator);
             CustomAdapter customAdapter = new CustomAdapter();
             mAdvertList.setAdapter(customAdapter);
-        }
-        if(progressDialog.isShowing()) {
-            progressDialog.dismiss();
         }
     }
 
