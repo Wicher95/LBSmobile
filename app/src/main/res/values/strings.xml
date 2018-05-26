@@ -28,10 +28,9 @@
         <item>Rolnictwo</item>
         <item>Praca</item>
         <item>Muzyka i Edukacja</item>
-        <item>Moda</item>
-        <item>Sport i Hobby</item>
         <item>Dom i Ogród</item>
         <item>Noclegi</item>
+        <item>Inne</item>
     </string-array>
 
 

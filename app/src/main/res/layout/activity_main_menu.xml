@@ -25,6 +25,15 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="54dp"/>
 
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f02e2e2e"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"/>
+
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

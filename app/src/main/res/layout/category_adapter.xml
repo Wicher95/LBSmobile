@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/text"
+        android:background="#f0afafaf"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Motoryzacja"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        android:padding="5dp"
+        android:layout_marginStart="10dp"/>
+    <ImageView
+        android:id="@+id/picked"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/checked"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_alignTop="@+id/text"
+        android:visibility="gone"/>
+
+
+</RelativeLayout>

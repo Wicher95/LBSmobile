@@ -59,6 +59,10 @@
             android:name=".DisplayAdvActivity"
             android:label="" />
         <activity android:name=".EditAdvActivity"></activity>
+        <activity
+            android:name=".Pop"
+            android:theme="@style/AppTheme.CustomTheme">
+        </activity>
     </application>
 
 </manifest>

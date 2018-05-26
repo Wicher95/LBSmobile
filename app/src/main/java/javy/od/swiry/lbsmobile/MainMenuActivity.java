@@ -3,11 +3,7 @@ package javy.od.swiry.lbsmobile;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.*;
 import android.support.v4.view.GravityCompat;
@@ -29,8 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,13 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.zxing.common.StringUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,6 +52,9 @@ public class MainMenuActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private boolean gotResult;
     private Timer timer;
+    public static String searchCategory;
+    private String searchText;
+    private ImageView mBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +76,8 @@ public class MainMenuActivity extends AppCompatActivity {
         mDrawerLayout = findViewById(R.id.menu);
         mAdvertList = findViewById(R.id.adverts);
         progressDialog = new ProgressDialog(this);
+        searchText = "";
+        mBackground = findViewById(R.id.background);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -120,6 +113,32 @@ public class MainMenuActivity extends AppCompatActivity {
         listHandler();
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        //Sprawdzenie czy użytkownik jest zalogowany
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
+            Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        }
+        mBackground.setVisibility(View.GONE);
+        if(searchCategory == null && searchText.equals("")) {
+            setTitle("Ogłoszenia");
+            displayAdv();
+        } else if(searchCategory != null || !searchText.equals("")) {
+            setTitle(searchCategory);
+            filterResults(searchText);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        searchCategory = null;
+        super.onStop();
+    }
+
     //Otwieranie bocznego menu przyciskiem z toolbara
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -142,27 +161,49 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 stripAccents(query);
-                listFiltered.clear();
-                for(Advert a:listAdverts)
-                {
-                    String x = stripAccents(a.getTitle().toLowerCase());
-                    if(x.contains(query.toLowerCase())) {
-                        listFiltered.add(a);
-                    }
-                }
-                displayFilteredAdv();
+                searchText = query;
+                filterResults(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 if(newText.equals("")) {
-                    displayAdv();
+                    searchText = "";
+                    filterResults(searchText);
                 }
                 return false;
             }
         });
+
+        MenuItem filterItem = menu.findItem(R.id.menuFilter);
+        filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                mBackground.setVisibility(View.VISIBLE);
+                startActivity(new Intent(MainMenuActivity.this, Pop.class));
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void filterResults(String query) {
+        listFiltered.clear();
+        for(Advert a:listAdverts)
+        {
+            String x = stripAccents(a.getTitle().toLowerCase());
+            if(x.contains(query.toLowerCase())) {
+                if(searchCategory != null) {
+                    if (a.getCategory().equals(searchCategory)) {
+                        listFiltered.add(a);
+                    }
+                } else {
+                    listFiltered.add(a);
+                }
+            }
+        }
+        displayFilteredAdv();
     }
 
     public static String stripAccents(String s)
@@ -174,29 +215,17 @@ public class MainMenuActivity extends AppCompatActivity {
         return s;
     }
 
+
     public void displayFilteredAdv(){
         if(listFiltered.size() > 0) {
             Collections.sort(listFiltered,TimeComparator);
             FilteredCustomAdapter customAdapter = new FilteredCustomAdapter();
             mAdvertList.setAdapter(customAdapter);
         } else {
+            mAdvertList.setAdapter(null);
             Toast.makeText(getApplicationContext(),"Brak wyników",Toast.LENGTH_SHORT).show();
         }
     }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        //Sprawdzenie czy użytkownik jest zalogowany
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
-            Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
-        }
-        //generateAdv();
-    }
-
 
     public void generateAdv() {
         progressDialog.setMessage("Wczytywanie ogłoszeń");
@@ -240,7 +269,7 @@ public class MainMenuActivity extends AppCompatActivity {
         // Setting timeout of 10 sec to the request
         timer.schedule(timerTask, 10000L);
     }
-    public void displayAdv(){
+    public void displayAdv() {
         if(listAdverts.size() > 0) {
             Collections.sort(listAdverts,TimeComparator);
             CustomAdapter customAdapter = new CustomAdapter();
