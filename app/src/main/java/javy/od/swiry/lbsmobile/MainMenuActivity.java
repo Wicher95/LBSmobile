@@ -56,7 +56,6 @@ public class MainMenuActivity extends AppCompatActivity {
     public static String searchCategory;
     private String searchText;
     private ImageView mBackground;
-    private boolean mNeedLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
