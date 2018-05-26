@@ -152,6 +152,7 @@ public class DisplayAdvActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(mFullImage.getVisibility() == View.VISIBLE) {
             mFullImage.setVisibility(View.GONE);
+            mFullImage2.setVisibility(View.GONE);
         } else {
             finish();
         }
