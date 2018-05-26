@@ -126,7 +126,6 @@ public class MainMenuActivity extends AppCompatActivity {
         }
         mBackground.setVisibility(View.GONE);
         if(searchCategory == null && searchText.equals("")) {
-            mNeedLoad = false;
             setTitle("Ogłoszenia");
             displayAdv();
         } else if(searchCategory != null || !searchText.equals("")) {
