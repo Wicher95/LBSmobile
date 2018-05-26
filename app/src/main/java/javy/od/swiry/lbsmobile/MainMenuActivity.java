@@ -243,7 +243,11 @@ public class MainMenuActivity extends AppCompatActivity {
                         listAdverts.add(0,advert);
                     }
                 }
-                displayAdv();
+                if(searchCategory != null || !searchText.equals("")) {
+                    filterResults(searchText);
+                } else {
+                    displayAdv();
+                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
