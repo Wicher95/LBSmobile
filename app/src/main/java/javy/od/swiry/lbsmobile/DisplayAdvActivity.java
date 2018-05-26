@@ -24,6 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -201,7 +204,7 @@ public class DisplayAdvActivity extends AppCompatActivity {
         mLocalization.setText(mAdvert.getLocalization());
         mPhone.setText(mAdvert.getPhone());
         Glide.with(mContext).load(mAdvert.getUrl()).into(mImage);
-        Glide.with(mContext).load(mAdvert.getUrl()).into(mFullImage2);
+        Glide.with(mContext).load(mAdvert.getUrl()).into(mFullImage);
 
         if(progressDialog.isShowing()) {
             progressDialog.dismiss();
@@ -209,13 +212,15 @@ public class DisplayAdvActivity extends AppCompatActivity {
         mImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFullImage.setImageDrawable(mFullImage2.getDrawable());
+                //mFullImage.setImageDrawable(mFullImage2.getDrawable());
+                mFullImage2.setVisibility(View.VISIBLE);
                 mFullImage.setVisibility(View.VISIBLE);
             }
         });
         mFullImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mFullImage2.setVisibility(View.GONE);
                 mFullImage.setVisibility(View.GONE);
             }
         });
