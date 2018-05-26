@@ -38,6 +38,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormatSymbols;
@@ -267,7 +268,20 @@ public class EditAdvActivity extends AppCompatActivity {
     public void addImage() {
         if(!imageNotChanged) {
             StorageReference images = mStorageRef.child(ID + ".jpg");
-            images.putFile(file)
+
+            Bitmap bmp = null;
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), file);
+                bmp = resizeImage(bmp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            byte[] data = baos.toByteArray();
+
+            //uploading the image
+            images.putBytes(data)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -292,6 +306,30 @@ public class EditAdvActivity extends AppCompatActivity {
             startActivity(new Intent(mContext,UserAdvActivity.class));
             progressDialog.dismiss();
         }
+    }
+
+    public Bitmap resizeImage(Bitmap bitmap) {
+        int maxWidth = 1920;
+        int maxHeight = 1920;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        if (width > height) {
+            // landscape
+            float ratio = (float) width / maxWidth;
+            width = maxWidth;
+            height = (int)(height / ratio);
+        } else if (height > width) {
+            // portrait
+            float ratio = (float) height / maxHeight;
+            height = maxHeight;
+            width = (int)(width / ratio);
+        } else {
+            // square
+            height = maxHeight;
+            width = maxWidth;
+        }
+        bitmap = bitmap.createScaledBitmap(bitmap,width,height,true);
+        return bitmap;
     }
 
     public void galleryOnClick(){
