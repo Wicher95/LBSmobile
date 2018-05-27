@@ -47,6 +47,7 @@ public class UserAdvActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private boolean gotResult;
     private Timer timer;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +142,9 @@ public class UserAdvActivity extends AppCompatActivity {
     public void generateAdv() {
         progressDialog.setMessage("Wczytywanie ogłoszeń");
         progressDialog.show();
+        gotResult = false;
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        uid = user.getUid();
         DatabaseReference adverts = FirebaseDatabase.getInstance().getReference("adverts");
         adverts.addValueEventListener(new ValueEventListener() {
             @Override
@@ -148,8 +152,6 @@ public class UserAdvActivity extends AppCompatActivity {
                 gotResult = true;
                 listAdverts.clear();
                 listIDs.clear();
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String uid = user.getUid();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Advert advert = ds.getValue(Advert.class);
                     if(advert != null) {

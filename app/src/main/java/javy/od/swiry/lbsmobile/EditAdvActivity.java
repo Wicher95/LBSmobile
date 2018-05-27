@@ -81,6 +81,10 @@ public class EditAdvActivity extends AppCompatActivity {
     private Timer timer;
     private boolean imageNotChanged;
     private Bitmap bitmap;
+    private Timer timer2;
+    private boolean gotResult2;
+    private Timer timer3;
+    private boolean gotResult3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,6 +225,7 @@ public class EditAdvActivity extends AppCompatActivity {
                     && !mPrice.getText().toString().equals("")) {
                 progressDialog.setMessage("Aktualizowanie ogłoszenia");
                 progressDialog.show();
+                gotResult2 = false;
                 try {
                     Advert advert = new Advert();
                     advert.setTitle(mTitle.getText().toString());
@@ -239,17 +244,32 @@ public class EditAdvActivity extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-
+                                    gotResult2 = true;
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+                                    gotResult2 = true;
                                     Toast.makeText(mContext, "Nie udało się zaktualizować ogłoszenia", Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
                                 }
                             });
-
+                    timer2 = new Timer();
+                    TimerTask timerTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            timer2.cancel();
+                            if (!gotResult2) { //  Timeout
+                                FirebaseAuth.getInstance().signOut();
+                                Intent intent = new Intent(mContext, StartActivity.class);
+                                intent.putExtra("fail","true");
+                                startActivity(intent);
+                            }
+                        }
+                    };
+                    // Setting timeout of 10 sec to the request
+                    timer2.schedule(timerTask, 10000L);
                     addImage();
 
                 } catch (Exception e) {
@@ -267,6 +287,7 @@ public class EditAdvActivity extends AppCompatActivity {
 
     public void addImage() {
         if(!imageNotChanged) {
+            gotResult3 = false;
             StorageReference images = mStorageRef.child(ID + ".jpg");
 
             Bitmap bmp = null;
@@ -285,6 +306,7 @@ public class EditAdvActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            gotResult3 = true;
                             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                             mDatabase.child("adverts").child(ID).child("url").setValue(taskSnapshot.getDownloadUrl().toString());
                             Toast.makeText(mContext, "Zaktualizowano ogłoszenie", Toast.LENGTH_SHORT).show();
@@ -295,10 +317,26 @@ public class EditAdvActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
+                            gotResult3 = true;
                             Toast.makeText(mContext, "Nie udało się zaktualizować ogłoszenia", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
                     });
+            timer3 = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    timer3.cancel();
+                    if (!gotResult3) { //  Timeout
+                        FirebaseAuth.getInstance().signOut();
+                        Intent intent = new Intent(mContext, StartActivity.class);
+                        intent.putExtra("fail","true");
+                        startActivity(intent);
+                    }
+                }
+            };
+            // Setting timeout of 10 sec to the request
+            timer3.schedule(timerTask, 10000L);
         } else {
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("adverts").child(ID).child("url").setValue(mAdvert.getUrl());
@@ -306,6 +344,7 @@ public class EditAdvActivity extends AppCompatActivity {
             startActivity(new Intent(mContext,UserAdvActivity.class));
             progressDialog.dismiss();
         }
+
     }
 
     public Bitmap resizeImage(Bitmap bitmap) {

@@ -237,6 +237,7 @@ public class MainMenuActivity extends AppCompatActivity {
         progressDialog.setIndeterminate(true);
         progressDialog.setCancelable(false);
         progressDialog.show();
+        gotResult = false;
         DatabaseReference adverts = FirebaseDatabase.getInstance().getReference("adverts");
         adverts.addValueEventListener(new ValueEventListener() {
             @Override

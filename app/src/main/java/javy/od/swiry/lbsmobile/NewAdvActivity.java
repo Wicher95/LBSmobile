@@ -46,6 +46,8 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javy.od.swiry.lbsmobile.models.Advert;
 import javy.od.swiry.lbsmobile.models.AdvertCount;
@@ -72,6 +74,10 @@ public class NewAdvActivity extends AppCompatActivity {
     private AdvertCount advertID;
     private DrawerLayout mDrawerLayout;
     private Spinner mCategory;
+    private Timer timer;
+    private boolean gotResult;
+    private Timer timer2;
+    private boolean gotResult2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +177,7 @@ public class NewAdvActivity extends AppCompatActivity {
                     && !mPrice.getText().toString().equals("")) {
                 progressDialog.setMessage("Dodawanie ogłoszenia");
                 progressDialog.show();
+                gotResult = false;
                 try {
                     FirebaseUser user = firebase.getCurrentUser();
                     uid = user.getUid();
@@ -209,16 +216,33 @@ public class NewAdvActivity extends AppCompatActivity {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    gotResult = true;
                                     addImage();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
+                                    gotResult = true;
                                     Toast.makeText(NewAdvActivity.this, "Nie udało się dodać ogłoszenia", Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
                                 }
                             });
+                    timer = new Timer();
+                    TimerTask timerTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            timer.cancel();
+                            if (!gotResult) { //  Timeout
+                                FirebaseAuth.getInstance().signOut();
+                                Intent intent = new Intent(NewAdvActivity.this, StartActivity.class);
+                                intent.putExtra("fail","true");
+                                startActivity(intent);
+                            }
+                        }
+                    };
+                    // Setting timeout of 10 sec to the request
+                    timer.schedule(timerTask, 10000L);
                 } catch (Exception e) {
                     Toast.makeText(NewAdvActivity.this, "Nie udało się dodać ogłoszenia", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
@@ -233,6 +257,7 @@ public class NewAdvActivity extends AppCompatActivity {
     }
 
     public void addImage() {
+        gotResult2 = false;
         StorageReference images = mStorageRef.child(uid+"_"+advertID.getCount()+".jpg");
 
         Bitmap bmp = null;
@@ -251,6 +276,7 @@ public class NewAdvActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        gotResult2 = true;
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                         mDatabase.child("adverts").child(uid+"_"+advertID.getCount()).child("url").setValue(taskSnapshot.getDownloadUrl().toString());
                         Toast.makeText(NewAdvActivity.this, "Dodano ogłoszenie", Toast.LENGTH_SHORT).show();
@@ -261,10 +287,26 @@ public class NewAdvActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
+                        gotResult2 = true;
                         Toast.makeText(NewAdvActivity.this, "Nie udało się dodać ogłoszenia", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
                 });
+        timer2 = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timer2.cancel();
+                if (!gotResult2) { //  Timeout
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(NewAdvActivity.this, StartActivity.class);
+                    intent.putExtra("fail","true");
+                    startActivity(intent);
+                }
+            }
+        };
+        // Setting timeout of 10 sec to the request
+        timer2.schedule(timerTask, 10000L);
     }
 
     public Bitmap resizeImage(Bitmap bitmap) {
