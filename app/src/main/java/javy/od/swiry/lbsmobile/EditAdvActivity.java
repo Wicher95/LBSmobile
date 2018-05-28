@@ -216,7 +216,7 @@ public class EditAdvActivity extends AppCompatActivity {
             }
         };
         // Setting timeout of 10 sec to the request
-        timer.schedule(timerTask, 10000L);
+        timer.schedule(timerTask, 30000L);
     }
     public void displayAdv(){
         mPrice.setText(mAdvert.getPrice());
@@ -288,7 +288,7 @@ public class EditAdvActivity extends AppCompatActivity {
                         }
                     };
                     // Setting timeout of 10 sec to the request
-                    timer2.schedule(timerTask, 10000L);
+                    timer2.schedule(timerTask, 30000L);
                     addImage();
 
                 } catch (Exception e) {
@@ -355,7 +355,7 @@ public class EditAdvActivity extends AppCompatActivity {
                 }
             };
             // Setting timeout of 10 sec to the request
-            timer3.schedule(timerTask, 10000L);
+            timer3.schedule(timerTask, 30000L);
         } else {
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             mDatabase.child("adverts").child(ID).child("url").setValue(mAdvert.getUrl());

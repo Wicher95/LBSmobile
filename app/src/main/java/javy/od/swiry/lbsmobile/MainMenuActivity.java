@@ -63,18 +63,6 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        DatabaseReference.goOnline();
-        timerResume = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                timerResume.cancel();
-                attachDisconnectListener();
-            }
-        };
-        // Setting timeout of 10 sec to the request
-        timerResume.schedule(timerTask, 2000L);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
@@ -147,10 +135,11 @@ public class MainMenuActivity extends AppCompatActivity {
                 if (connected) {
 
                 } else {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(MainMenuActivity.this, StartActivity.class);
-                    intent.putExtra("fail", "true");
-                    startActivity(intent);
+                    DatabaseReference.goOnline();
+                    //FirebaseAuth.getInstance().signOut();
+                    //Intent intent = new Intent(MainMenuActivity.this, StartActivity.class);
+                    //intent.putExtra("fail", "true");
+                    //startActivity(intent);
                 }
             }
             @Override
@@ -289,6 +278,17 @@ public class MainMenuActivity extends AppCompatActivity {
                 }
             }
         });
+
+        timerResume = new Timer();
+        TimerTask timerTaskResume = new TimerTask() {
+            @Override
+            public void run() {
+                timerResume.cancel();
+                attachDisconnectListener();
+            }
+        };
+        timerResume.schedule(timerTaskResume, 100L);
+
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -303,7 +303,7 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         };
         // Setting timeout of 10 sec to the request
-        timer.schedule(timerTask, 10000L);
+        timer.schedule(timerTask, 30000L);
     }
 
     public void displayAdv() {

@@ -195,7 +195,7 @@ public class DisplayAdvActivity extends AppCompatActivity {
             }
         };
         // Setting timeout of 10 sec to the request
-        timer.schedule(timerTask, 10000L);
+        timer.schedule(timerTask, 30000L);
     }
     public void displayAdv(){
         String price = mAdvert.getPrice() + " zł";

@@ -261,7 +261,7 @@ public class NewAdvActivity extends AppCompatActivity {
                         }
                     };
                     // Setting timeout of 10 sec to the request
-                    timer.schedule(timerTask, 10000L);
+                    timer.schedule(timerTask, 30000L);
                 } catch (Exception e) {
                     Toast.makeText(NewAdvActivity.this, "Nie udało się dodać ogłoszenia", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
@@ -325,7 +325,7 @@ public class NewAdvActivity extends AppCompatActivity {
             }
         };
         // Setting timeout of 10 sec to the request
-        timer2.schedule(timerTask, 10000L);
+        timer2.schedule(timerTask, 30000L);
     }
 
     public Bitmap resizeImage(Bitmap bitmap) {
