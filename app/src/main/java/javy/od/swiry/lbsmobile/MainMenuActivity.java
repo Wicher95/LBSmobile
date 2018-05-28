@@ -25,6 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -97,6 +100,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+        attachDisconnectListener();
         generateAdv();
         listHandler();
     }
@@ -132,14 +136,26 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 boolean connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    DatabaseReference.goOnline();
-                } else {
-                    DatabaseReference.goOnline();
+                if (!connected) {
+                    DatabaseReference.goOffline();
+                    timerResume = new Timer();
+                    TimerTask timerTaskResume = new TimerTask() {
+                        @Override
+                        public void run() {
+                            timerResume.cancel();
+                            DatabaseReference.goOnline();
+                        }
+                    };
+                    timerResume.schedule(timerTaskResume, 3000L);
                 }
             }
             @Override
             public void onCancelled(DatabaseError error) {
+                DatabaseReference.goOffline();
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(MainMenuActivity.this, StartActivity.class);
+                intent.putExtra("fail", "true");
+                startActivity(intent);
             }
         });
     }
@@ -274,16 +290,6 @@ public class MainMenuActivity extends AppCompatActivity {
                 }
             }
         });
-
-        timerResume = new Timer();
-        TimerTask timerTaskResume = new TimerTask() {
-            @Override
-            public void run() {
-                timerResume.cancel();
-                attachDisconnectListener();
-            }
-        };
-        timerResume.schedule(timerTaskResume, 100L);
 
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
