@@ -69,9 +69,6 @@ public class MainMenuActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
-        } else {
-            DatabaseReference.goOffline();
-            DatabaseReference.goOnline();
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);

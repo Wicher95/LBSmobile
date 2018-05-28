@@ -20,6 +20,15 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Sprawdzenie czy użytkownik jest zalogowany
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            startActivity(new Intent(this, MainMenuActivity.class));
+        }
+    }
     public void login(View view) {
         Intent myIntent = new Intent(this, MainActivity.class);
         startActivity(myIntent);
