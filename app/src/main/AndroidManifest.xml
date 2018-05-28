@@ -48,7 +48,6 @@
         <activity
             android:name=".MainMenuActivity"
             android:label="Ogłoszenia" />
-        <activity android:name=".ProgramActivity" />
         <activity
             android:name=".NewAdvActivity"
             android:label="Dodaj ogłoszenie" />

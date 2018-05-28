@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class MainMenuActivity extends AppCompatActivity {
     public static String searchCategory;
     private String searchText;
     private ImageView mBackground;
+    private static boolean firstRun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,9 @@ public class MainMenuActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        } else {
+            DatabaseReference.goOffline();
+            DatabaseReference.goOnline();
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -123,6 +128,9 @@ public class MainMenuActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        } else {
+            DatabaseReference.goOffline();
+            DatabaseReference.goOnline();
         }
         mBackground.setVisibility(View.GONE);
         if(searchCategory == null && searchText.equals("")) {

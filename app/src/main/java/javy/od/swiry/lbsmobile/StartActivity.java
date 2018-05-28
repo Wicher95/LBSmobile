@@ -15,23 +15,8 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        //Sprawdzenie czy użytkownik jest zalogowany
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            startActivity(new Intent(this, MainMenuActivity.class));
-        }
         if(getIntent().getStringExtra("fail") != null) {
             Toast.makeText(StartActivity.this,"Błąd połączenia, zaloguj się ponownie",Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-        //Sprawdzenie czy użytkownik jest zalogowany
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            startActivity(new Intent(this, MainMenuActivity.class));
         }
     }
 

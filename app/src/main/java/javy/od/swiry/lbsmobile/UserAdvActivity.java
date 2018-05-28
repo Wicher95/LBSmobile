@@ -56,8 +56,11 @@ public class UserAdvActivity extends AppCompatActivity {
         //Sprawdzenie czy użytkownik jest zalogowany
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            startActivity(new Intent(UserAdvActivity.this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        } else {
+            DatabaseReference.goOffline();
+            DatabaseReference.goOnline();
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -119,8 +122,11 @@ public class UserAdvActivity extends AppCompatActivity {
         //Sprawdzenie czy użytkownik jest zalogowany
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            startActivity(new Intent(UserAdvActivity.this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        } else {
+            DatabaseReference.goOffline();
+            DatabaseReference.goOnline();
         }
         generateAdv();
     }

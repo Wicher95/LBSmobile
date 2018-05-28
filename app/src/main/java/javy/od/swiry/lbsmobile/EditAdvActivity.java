@@ -102,6 +102,16 @@ public class EditAdvActivity extends AppCompatActivity {
         mGallery = findViewById(R.id.gallery);
         mTitle = findViewById(R.id.title);
 
+        //Sprawdzenie czy użytkownik jest zalogowany
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(mContext, MainActivity.class));
+            Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        } else {
+            DatabaseReference.goOffline();
+            DatabaseReference.goOnline();
+        }
+
         mCategory = findViewById(R.id.category);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Categories));
@@ -161,6 +171,20 @@ public class EditAdvActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume(){
+        //Sprawdzenie czy użytkownik jest zalogowany
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            startActivity(new Intent(mContext, MainActivity.class));
+            Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        } else {
+            DatabaseReference.goOffline();
+            DatabaseReference.goOnline();
+        }
+        super.onResume();
     }
 
     public void fillData(){

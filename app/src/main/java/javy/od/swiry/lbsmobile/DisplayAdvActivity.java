@@ -69,6 +69,9 @@ public class DisplayAdvActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(mContext, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        } else {
+            DatabaseReference.goOffline();
+            DatabaseReference.goOnline();
         }
 
         mContext = this;
@@ -144,6 +147,9 @@ public class DisplayAdvActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(mContext, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        } else {
+            DatabaseReference.goOffline();
+            DatabaseReference.goOnline();
         }
         downloadAdv();
     }
