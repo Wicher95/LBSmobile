@@ -133,13 +133,9 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 boolean connected = snapshot.getValue(Boolean.class);
                 if (connected) {
-
+                    DatabaseReference.goOnline();
                 } else {
                     DatabaseReference.goOnline();
-                    //FirebaseAuth.getInstance().signOut();
-                    //Intent intent = new Intent(MainMenuActivity.this, StartActivity.class);
-                    //intent.putExtra("fail", "true");
-                    //startActivity(intent);
                 }
             }
             @Override
