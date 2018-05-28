@@ -73,7 +73,7 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         };
         // Setting timeout of 10 sec to the request
-        timerResume.schedule(timerTask, 500L);
+        timerResume.schedule(timerTask, 2000L);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
