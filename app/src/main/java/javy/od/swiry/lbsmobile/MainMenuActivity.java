@@ -20,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +32,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -71,7 +69,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void run() {
                 timerResume.cancel();
-                attachDistonectListener();
+                attachDisconnectListener();
             }
         };
         // Setting timeout of 10 sec to the request
@@ -140,7 +138,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    public void attachDistonectListener() {
+    public void attachDisconnectListener() {
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
