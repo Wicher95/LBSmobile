@@ -108,9 +108,6 @@ public class EditAdvActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(mContext, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
-        } else {
-            DatabaseReference.goOffline();
-            DatabaseReference.goOnline();
         }
 
         mCategory = findViewById(R.id.category);
@@ -181,18 +178,6 @@ public class EditAdvActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(mContext, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
-        } else {
-            DatabaseReference.goOffline();
-            timerResume = new Timer();
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    timerResume.cancel();
-                    DatabaseReference.goOnline();
-                }
-            };
-            // Setting timeout of 10 sec to the request
-            timerResume.schedule(timerTask, 100L);
         }
         super.onResume();
     }

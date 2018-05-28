@@ -65,12 +65,17 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        //Sprawdzenie czy użytkownik jest zalogowany
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
-            Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
-        }
+        DatabaseReference.goOnline();
+        timerResume = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timerResume.cancel();
+                attachDistonectListener();
+            }
+        };
+        // Setting timeout of 10 sec to the request
+        timerResume.schedule(timerTask, 500L);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -91,22 +96,15 @@ public class MainMenuActivity extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
 
                         String itemTitle = String.valueOf(menuItem.getTitle());
-                        if(itemTitle.equals("Dodaj ogłoszenie"))
-                        {
-                            startActivity(new Intent(MainMenuActivity.this,NewAdvActivity.class));
-                        }
-                        else if(itemTitle.equals("Ogłoszenia"))
-                        {
+                        if (itemTitle.equals("Dodaj ogłoszenie")) {
+                            startActivity(new Intent(MainMenuActivity.this, NewAdvActivity.class));
+                        } else if (itemTitle.equals("Ogłoszenia")) {
                             //startActivity(new Intent(MainActivity.this,MapsActivity.class));
-                        }
-                        else if(itemTitle.equals("Moje ogłoszenia"))
-                        {
-                            startActivity(new Intent(MainMenuActivity.this,UserAdvActivity.class));
-                        }
-                        else if(itemTitle.equals("Wiadomości"))
-                        {
+                        } else if (itemTitle.equals("Moje ogłoszenia")) {
+                            startActivity(new Intent(MainMenuActivity.this, UserAdvActivity.class));
+                        } else if (itemTitle.equals("Wiadomości")) {
                             //startActivity(new Intent(MainActivity.this,AddShopActivity.class));
-                        } else if(itemTitle.equals("Wyloguj się")) {
+                        } else if (itemTitle.equals("Wyloguj się")) {
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(MainMenuActivity.this, StartActivity.class));
                         }
@@ -118,32 +116,19 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         //Sprawdzenie czy użytkownik jest zalogowany
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
-            Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
-        } else {
-            DatabaseReference.goOffline();
-            timerResume = new Timer();
-            TimerTask timerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    timerResume.cancel();
-                    DatabaseReference.goOnline();
-                }
-            };
-            // Setting timeout of 10 sec to the request
-            timerResume.schedule(timerTask, 100L);
+            Toast.makeText(this, "Aby kontynuować musisz się zalogować", Toast.LENGTH_SHORT).show();
         }
         mBackground.setVisibility(View.GONE);
-        if(searchCategory == null && searchText.equals("")) {
+        if (searchCategory == null && searchText.equals("")) {
             setTitle("Ogłoszenia");
             displayAdv();
-        } else if(searchCategory != null || !searchText.equals("")) {
+        } else if (searchCategory != null || !searchText.equals("")) {
             setTitle(searchCategory);
             filterResults(searchText);
         }
@@ -153,6 +138,27 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onStop() {
         searchCategory = null;
         super.onStop();
+    }
+
+    public void attachDistonectListener() {
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+
+                } else {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(MainMenuActivity.this, StartActivity.class);
+                    intent.putExtra("fail", "true");
+                    startActivity(intent);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
     }
 
     //Otwieranie bocznego menu przyciskiem z toolbara
@@ -169,7 +175,7 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_menu,menu);
+        inflater.inflate(R.menu.search_menu, menu);
         MenuItem item = menu.findItem(R.id.menuSearch);
         SearchView searchView = (SearchView) item.getActionView();
 
@@ -184,7 +190,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(newText.equals("")) {
+                if (newText.equals("")) {
                     searchText = "";
                     filterResults(searchText);
                 }
@@ -205,15 +211,14 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void filterResults(String query) {
-        if(!progressDialog.isShowing()) {
+        if (!progressDialog.isShowing()) {
             progressDialog.show();
         }
         listFiltered.clear();
-        for(Advert a:listAdverts)
-        {
+        for (Advert a : listAdverts) {
             String x = stripAccents(a.getTitle().toLowerCase());
-            if(x.contains(query.toLowerCase())) {
-                if(searchCategory != null) {
+            if (x.contains(query.toLowerCase())) {
+                if (searchCategory != null) {
                     if (a.getCategory().equals(searchCategory)) {
                         listFiltered.add(a);
                     }
@@ -225,24 +230,23 @@ public class MainMenuActivity extends AppCompatActivity {
         displayFilteredAdv();
     }
 
-    public static String stripAccents(String s)
-    {
+    public static String stripAccents(String s) {
         s = Normalizer.normalize(s, Normalizer.Form.NFD);
         s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-        s = s.replace("ł","l");
+        s = s.replace("ł", "l");
         s = s.replace("Ł", "L");
         return s;
     }
 
 
-    public void displayFilteredAdv(){
-        if(listFiltered.size() > 0) {
-            Collections.sort(listFiltered,TimeComparator);
+    public void displayFilteredAdv() {
+        if (listFiltered.size() > 0) {
+            Collections.sort(listFiltered, TimeComparator);
             FilteredCustomAdapter customAdapter = new FilteredCustomAdapter();
             mAdvertList.setAdapter(customAdapter);
         } else {
             mAdvertList.setAdapter(null);
-            Toast.makeText(getApplicationContext(),"Brak wyników",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Brak wyników", Toast.LENGTH_SHORT).show();
         }
         progressDialog.dismiss();
     }
@@ -261,27 +265,28 @@ public class MainMenuActivity extends AppCompatActivity {
                 listAdverts.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Advert advert = ds.getValue(Advert.class);
-                    if(advert != null) {
+                    if (advert != null) {
                         advert.setID(ds.getKey());
-                        listAdverts.add(0,advert);
+                        listAdverts.add(0, advert);
                     }
                 }
-                if(searchCategory != null || !searchText.equals("")) {
+                if (searchCategory != null || !searchText.equals("")) {
                     filterResults(searchText);
-                    if(progressDialog.isShowing()) {
+                    if (progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
                 } else {
                     displayAdv();
-                    if(progressDialog.isShowing()) {
+                    if (progressDialog.isShowing()) {
                         progressDialog.dismiss();
                     }
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 gotResult = true;
-                if(progressDialog.isShowing()) {
+                if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
             }
@@ -294,7 +299,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 if (!gotResult) { //  Timeout
                     FirebaseAuth.getInstance().signOut();
                     Intent intent = new Intent(MainMenuActivity.this, StartActivity.class);
-                    intent.putExtra("fail","true");
+                    intent.putExtra("fail", "true");
                     startActivity(intent);
                 }
             }
@@ -302,9 +307,10 @@ public class MainMenuActivity extends AppCompatActivity {
         // Setting timeout of 10 sec to the request
         timer.schedule(timerTask, 10000L);
     }
+
     public void displayAdv() {
-        if(listAdverts.size() > 0) {
-            Collections.sort(listAdverts,TimeComparator);
+        if (listAdverts.size() > 0) {
+            Collections.sort(listAdverts, TimeComparator);
             CustomAdapter customAdapter = new CustomAdapter();
             mAdvertList.setAdapter(customAdapter);
         }
@@ -315,14 +321,13 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int i, long l) {
                 TextView textView = v.findViewById(R.id.advID);
-                String advID = (String)textView.getText();
+                String advID = (String) textView.getText();
                 Intent intent = new Intent(getApplicationContext(), DisplayAdvActivity.class);
                 intent.putExtra("ID", advID);
                 startActivity(intent);
             }
         });
     }
-
 
 
     public class CustomAdapter extends BaseAdapter {
@@ -407,7 +412,7 @@ public class MainMenuActivity extends AppCompatActivity {
             = new Comparator<Advert>() {
         public int compare(Advert d1, Advert d2) {
             if (d1.getTime() != null && d2.getTime() != null) {
-                return (int)(Long.valueOf(d2.getTime()) - Long.valueOf(d1.getTime()));
+                return (int) (Long.valueOf(d2.getTime()) - Long.valueOf(d1.getTime()));
             } else {
                 return 0;
             }
