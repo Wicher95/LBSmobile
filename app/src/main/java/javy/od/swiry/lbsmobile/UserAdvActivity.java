@@ -48,6 +48,7 @@ public class UserAdvActivity extends AppCompatActivity {
     private boolean gotResult;
     private Timer timer;
     private String uid;
+    private Timer timerResume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +127,16 @@ public class UserAdvActivity extends AppCompatActivity {
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
         } else {
             DatabaseReference.goOffline();
-            DatabaseReference.goOnline();
+            timerResume = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    timerResume.cancel();
+                    DatabaseReference.goOnline();
+                }
+            };
+            // Setting timeout of 10 sec to the request
+            timerResume.schedule(timerTask, 100L);
         }
         generateAdv();
     }

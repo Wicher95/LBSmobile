@@ -58,6 +58,7 @@ public class DisplayAdvActivity extends AppCompatActivity {
     private TextView mPhone;
     private ImageView mFullImage;
     private ImageView mFullImage2;
+    private Timer timerResume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,9 +148,18 @@ public class DisplayAdvActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(mContext, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
-        } else {
+        }else {
             DatabaseReference.goOffline();
-            DatabaseReference.goOnline();
+            timerResume = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    timerResume.cancel();
+                    DatabaseReference.goOnline();
+                }
+            };
+            // Setting timeout of 10 sec to the request
+            timerResume.schedule(timerTask, 100L);
         }
         downloadAdv();
     }

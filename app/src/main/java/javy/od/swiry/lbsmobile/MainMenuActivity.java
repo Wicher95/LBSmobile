@@ -54,6 +54,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private boolean gotResult;
     private Timer timer;
+    private Timer timerResume;
     public static String searchCategory;
     private String searchText;
     private ImageView mBackground;
@@ -127,7 +128,16 @@ public class MainMenuActivity extends AppCompatActivity {
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
         } else {
             DatabaseReference.goOffline();
-            DatabaseReference.goOnline();
+            timerResume = new Timer();
+            TimerTask timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    timerResume.cancel();
+                    DatabaseReference.goOnline();
+                }
+            };
+            // Setting timeout of 10 sec to the request
+            timerResume.schedule(timerTask, 100L);
         }
         mBackground.setVisibility(View.GONE);
         if(searchCategory == null && searchText.equals("")) {
