@@ -64,6 +64,7 @@ public class DisplayAdvActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_adv);
+        mContext = this;
 
         //Sprawdzenie czy użytkownik jest zalogowany
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -72,7 +73,6 @@ public class DisplayAdvActivity extends AppCompatActivity {
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
         }
 
-        mContext = this;
         progressDialog = new ProgressDialog(this);
         mImage = findViewById(R.id.image);
         mPrice = findViewById(R.id.price);
@@ -112,7 +112,7 @@ public class DisplayAdvActivity extends AppCompatActivity {
                         }
                         else if(itemTitle.equals("Wiadomości"))
                         {
-                            //startActivity(new Intent(MainActivity.this,AddShopActivity.class));
+                            startActivity(new Intent(mContext,MessagesActivity.class));
                         } else if(itemTitle.equals("Wyloguj się")) {
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(mContext, StartActivity.class));

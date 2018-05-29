@@ -57,11 +57,11 @@
         <activity
             android:name=".DisplayAdvActivity"
             android:label="" />
-        <activity android:name=".EditAdvActivity"></activity>
+        <activity android:name=".EditAdvActivity" />
         <activity
             android:name=".Pop"
-            android:theme="@style/AppTheme.CustomTheme">
-        </activity>
+            android:theme="@style/AppTheme.CustomTheme"></activity>
+        <activity android:name=".MessagesActivity"></activity>
     </application>
 
 </manifest>

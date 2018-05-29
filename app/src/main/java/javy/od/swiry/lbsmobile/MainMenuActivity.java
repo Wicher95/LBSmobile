@@ -92,7 +92,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         } else if (itemTitle.equals("Moje ogłoszenia")) {
                             startActivity(new Intent(MainMenuActivity.this, UserAdvActivity.class));
                         } else if (itemTitle.equals("Wiadomości")) {
-                            //startActivity(new Intent(MainActivity.this,AddShopActivity.class));
+                            startActivity(new Intent(MainMenuActivity.this,MessagesActivity.class));
                         } else if (itemTitle.equals("Wyloguj się")) {
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(MainMenuActivity.this, StartActivity.class));
@@ -100,6 +100,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+        searchCategory = null;
         attachDisconnectListener();
         generateAdv();
         listHandler();
@@ -126,7 +127,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        searchCategory = null;
+        //searchCategory = null;
         super.onStop();
     }
 

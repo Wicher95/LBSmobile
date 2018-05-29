@@ -92,7 +92,7 @@ public class UserAdvActivity extends AppCompatActivity {
                         }
                         else if(itemTitle.equals("Wiadomości"))
                         {
-                            //startActivity(new Intent(MainActivity.this,AddShopActivity.class));
+                            startActivity(new Intent(UserAdvActivity.this,MessagesActivity.class));
                         } else if(itemTitle.equals("Wyloguj się")) {
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(UserAdvActivity.this, StartActivity.class));
