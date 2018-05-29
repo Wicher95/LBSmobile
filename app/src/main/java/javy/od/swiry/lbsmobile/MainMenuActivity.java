@@ -137,16 +137,16 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 boolean connected = snapshot.getValue(Boolean.class);
                 if (!connected) {
-                    DatabaseReference.goOffline();
+                    FirebaseDatabase.getInstance().getReference().goOffline();
                     timerResume = new Timer();
                     TimerTask timerTaskResume = new TimerTask() {
                         @Override
                         public void run() {
                             timerResume.cancel();
-                            DatabaseReference.goOnline();
+                            FirebaseDatabase.getInstance().getReference().goOnline();
                         }
                     };
-                    timerResume.schedule(timerTaskResume, 3000L);
+                    timerResume.schedule(timerTaskResume, 100L);
                 }
             }
             @Override
