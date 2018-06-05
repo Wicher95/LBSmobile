@@ -122,8 +122,9 @@ public class UserAdvActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(this, MainActivity.class));
             Toast.makeText(this,"Aby kontynuować musisz się zalogować",Toast.LENGTH_SHORT).show();
+        } else {
+            generateAdv();
         }
-        generateAdv();
     }
 
     private void listHandler() {

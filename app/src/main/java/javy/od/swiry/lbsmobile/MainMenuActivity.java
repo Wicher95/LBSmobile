@@ -114,15 +114,24 @@ public class MainMenuActivity extends AppCompatActivity {
         if (user == null) {
             startActivity(new Intent(MainMenuActivity.this, MainActivity.class));
             Toast.makeText(this, "Aby kontynuować musisz się zalogować", Toast.LENGTH_SHORT).show();
+        } else {
+            mBackground.setVisibility(View.GONE);
+            if (searchCategory == null && searchText.equals("")) {
+                setTitle("Ogłoszenia");
+                displayAdv();
+            } else if (searchCategory != null || !searchText.equals("")) {
+                setTitle(searchCategory);
+                filterResults(searchText);
+            }
         }
-        mBackground.setVisibility(View.GONE);
-        if (searchCategory == null && searchText.equals("")) {
-            setTitle("Ogłoszenia");
-            displayAdv();
-        } else if (searchCategory != null || !searchText.equals("")) {
-            setTitle(searchCategory);
-            filterResults(searchText);
-        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
     }
 
     @Override
